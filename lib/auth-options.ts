@@ -2,6 +2,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import { axiosInstance } from './fetch';
+import { decodeJwt, encodeJwt } from './token';
 
 const check_admin = (email: string, other_type: string) => {
 	const admins = process.env.ORGANIZER_ADMINS?.split(',');
@@ -21,6 +22,20 @@ const {
 export const auth_options = {
 	pages: {
 		signIn: '/login',
+	},
+	jwt: {
+		encode: async ({ token, secret }: any) => {
+			if (token && secret) {
+				return encodeJwt(token, secret);
+			}
+			return '';
+		},
+		decode: async ({ token, secret }: any) => {
+			if (token && secret) {
+				return decodeJwt(token, secret);
+			}
+			return null;
+		},
 	},
 	providers: [
 		GitHubProvider({

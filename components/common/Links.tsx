@@ -5,7 +5,6 @@ import Logout from './Logout';
 
 const Links = async () => {
 	const session = await getServerSession(auth_options);
-
 	return (
 		<ul className="flex gap-2 text-sm">
 			{session?.user?.role === 'admin' && (
